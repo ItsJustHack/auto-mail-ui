@@ -1,0 +1,22 @@
+typemail = 2
+# 1 = Premier Contact
+# 2 = Relance
+
+
+[premiercontact]
+mail_path = "./mails/premier_contact"
+objet = "Invitation à la 41ème édition du Forum-Est Horizon"
+attachements = [
+	"plaquettes/Aide_inscription.pdf",
+	"plaquettes/Presentation_Forum_Est_Horizon.pdf",
+	"plaquettes/Descriptif_de_l_offre.pdf",
+]
+
+[relance]
+mail_path = "./mails/relance"
+objet = "Confirmation de participation au Forum Est-Horizon"
+attachements = [
+	"plaquettes/Aide_inscription.pdf",
+	"plaquettes/Presentation_Forum_Est_Horizon.pdf",
+	"plaquettes/Descriptif_de_l_offre.pdf",
+]
