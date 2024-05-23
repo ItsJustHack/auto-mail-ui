@@ -1,9 +1,10 @@
 [package]
 name = "auto-mail-forum-with-ui"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.0.1"
+description = "Envoi des mails aux entreprises des formums automatiquement"
+authors = ["Eliott LEBOEUF"]
 edition = "2021"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -20,3 +21,4 @@ toml = "0.4.2"
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
 custom-protocol = ["tauri/custom-protocol"]
+
