@@ -1,55 +1,34 @@
+
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="styles.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tauri App</title>
-  <script type="module" src="/main.js" defer></script>
-  <style>
-    .logo.vanilla:hover {
-      filter: drop-shadow(0 0 2em #ffe21c);
-    }
-  </style>
+  <link href="test.css" rel="stylesheet">
+  <title>Forum auto mail</title>
 </head>
 
-<body>
-  <div class="container">
+<body>    
+    <script src="main.js"></script>
 
-    <div class="row">
-      <input type="text" id="searchInput" list="addressList" placeholder="Rechercher une adresse email...">
-      <datalist id="addressList"></datalist>
-      <label for="MailContent"> Mail Content:<label>
-          <input type="text" id="MailContent">
+    <div class="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col items-center justify-center">
+      <h1 class="text-3xl font-bold mb-4">Automatic Mail Sender</h1>
+      <form id="myForm" class="w-full max-w-md p-4 bg-zinc-100 dark:bg-zinc-700 shadow-md rounded-lg">
+        <label for="email" class="block mb-2">Recipient Email:</label>
+        <input type="email" id="email" name="email" class="w-full px-3 py-2 mb-4 border rounded-lg text-black" placeholder="Enter recipient email">
+        <label for="entreprise" class="block mb-2">Entreprise:</label>
+        <input type="text" id="entreprise" name="entreprise" class="w-full px-3 py-2 mb-4 border rounded-lg text-black" placeholder="Enter entreprise name">
+        <label for="subject" class="block mb-2">Subject:</label>
+        <input type="text" id="subject" name="subject" class="w-full px-3 py-2 mb-4 border rounded-lg text-black" placeholder="Enter email subject" value="Template 1">
+        <label for="message" class="block mb-2">Message:</label>
+        <textarea id="message" name="message" class="w-full px-3 py-2 mb-4 border rounded-lg text-black" rows="4" placeholder="Enter your message">Template 1 message content</textarea>
+        <div class="flex justify-between mb-4">
+          <button type="button" id="template1" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">Template 1</button>
+<button type="button" id="template2" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">Template 2</button>
+        </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">Send Email</button>
+      </form>
     </div>
 
-    <form class="row" id="greet-form">
-      <input type="text" id="entreprise" placeholder="Nom de l'entreprise">
-    </form>
-    <label for="templateSelect">Choisir un template de mail :</label>
-    <select id="templateSelect">
-      <option value="template1">Premier Contact</option>
-      <option value="template2">Relance</option>
-    </select>
-    <button id="sendButton">Envoyer le mail</button>
-
-    <div data-tauri-drag-region class="titlebar">
-      <div class="titlebar-button" id="titlebar-minimize">
-        <img src="https://api.iconify.design/mdi:window-minimize.svg" alt="minimize" />
-      </div>
-      <div class="titlebar-button" id="titlebar-maximize">
-        <img src="https://api.iconify.design/mdi:window-maximize.svg" alt="maximize" />
-      </div>
-      <div class="titlebar-button" id="titlebar-close">
-        <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
-      </div>
-    </div>
-
-
-  </div>
-
-  <script src="script.js"></script>
 </body>
-
-</html>

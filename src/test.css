@@ -1,0 +1,137 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dark {
+    background-color: #18181b;
+    color: #e4e4e7;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+/* Container Styles */
+.bg-white {
+    background-color: white;
+}
+
+.dark\:bg-zinc-800 {
+    background-color: #27272a;
+}
+
+.text-zinc-900 {
+    color: #18181b;
+}
+
+.dark\:text-zinc-100 {
+    color: #f4f4f5;
+}
+
+/* Form Styles */
+form {
+    width: 100%;
+    max-width: 28rem;
+    padding: 1rem;
+    background-color: #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.dark\:bg-zinc-700 {
+    background-color: #3f3f46;
+}
+
+/* Heading Styles */
+h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* Label Styles */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+/* Input and Textarea Styles */
+input,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: black;
+    transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3182ce;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Button Styles */
+button {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2563eb;
+}
+
+/* Template Button Styles */
+#template1,
+#template2,
+[type="submit"] {
+    background-color: #3b82f6;
+    color: white;
+}
+
+#template1:hover,
+#template2:hover,
+[type="submit"]:hover {
+    background-color: #2563eb;
+}
+
+/* Flex Container for Template Buttons */
+.flex.justify-between {
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
