@@ -4,27 +4,16 @@ use lettre::message::header::ContentType;
 use lettre::message::{Attachment, MultiPart, SinglePart};
 use lettre::Message;
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::path::Path;
 use std::{fs, io};
 
 static EMAIL_TYPE_PATH: &str = "config/email_type.toml";
 
-trait TypeMail {
-    fn mail_content(&self) -> MailContent;
-}
-
 #[derive(Deserialize)]
-struct PremierContact {
-    mail_path: String,
-    objet: String,
-    attachements: Vec<String>,
-}
-
-#[derive(Deserialize)]
-struct Relance {
-    mail_path: String,
-    objet: String,
-    attachements: Vec<String>,
+struct MailConfig {
+    #[serde(flatten)]
+    mails: HashMap<String, MailContent>,
 }
 
 #[derive(Deserialize)]
@@ -32,33 +21,6 @@ pub struct MailContent {
     pub mail_path: String,
     pub objet: String,
     pub attachements: Vec<String>,
-}
-
-#[derive(Deserialize)]
-struct ChooseEmail {
-    pub typemail: u8,
-    pub premiercontact: PremierContact,
-    pub relance: Relance,
-}
-
-impl TypeMail for PremierContact {
-    fn mail_content(&self) -> MailContent {
-        MailContent {
-            mail_path: self.mail_path.clone(),
-            objet: self.objet.clone(),
-            attachements: self.attachements.clone(),
-        }
-    }
-}
-
-impl TypeMail for Relance {
-    fn mail_content(&self) -> MailContent {
-        MailContent {
-            mail_path: self.mail_path.clone(),
-            objet: self.objet.clone(),
-            attachements: self.attachements.clone(),
-        }
-    }
 }
 
 fn create_attachements(mail_content: &MailContent) -> Result<Vec<SinglePart>, io::Error> {
@@ -93,24 +55,16 @@ fn create_id(config: &Config) -> String {
     format!("{} {} <{}>", config.nom, config.prenom, config.envoyeur)
 }
 
-fn choose_email_content(email_type: &ChooseEmail) -> MailContent {
-    match email_type.typemail {
-        1 => email_type.premiercontact.mail_content(),
-        2 => email_type.relance.mail_content(),
-        _ => panic!("Type de mail non valide"),
-    }
-}
-
-fn build_email_type() -> ChooseEmail {
+fn read_emails() -> MailConfig {
     let path = Path::new(EMAIL_TYPE_PATH);
     let configuration_file = fs::read_to_string(path).expect("Incapacité de lire le fichier de type de mail, le fichier a t'il le bon nomet est-il accessible ?");
-
     toml::from_str(&configuration_file).expect("Mauvais formattage du fichier de configuration")
 }
 
 /// This function takes a config as an argument and returns the formatted email
 pub fn build_email(config: &Config) -> Result<Message, MailError> {
-    let mail_content = choose_email_content(&build_email_type());
+    let h: MailConfig = read_emails();
+    let mail_content = h.mails.get("relance").unwrap();
     let email = Message::builder()
         .from(create_id(config).parse().unwrap())
         .to(config.destinataire.parse().unwrap())
@@ -122,7 +76,7 @@ pub fn build_email(config: &Config) -> Result<Message, MailError> {
                 MultiPart::related().singlepart(
                     SinglePart::builder()
                         .header(ContentType::TEXT_PLAIN)
-                        .body(remplace_text(mail_content.mail_path, config)?),
+                        .body(remplace_text(mail_content.mail_path.clone(), config)?),
                 ),
                 |acc: MultiPart, el: &SinglePart| acc.singlepart(el.clone()),
             ),
