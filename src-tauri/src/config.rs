@@ -13,6 +13,12 @@ pub struct FormData {
 }
 
 #[derive(Deserialize)]
+pub struct Identity {
+    pub nom: String,
+    pub prenom: String,
+}
+
+#[derive(Deserialize)]
 pub struct FileConfig {
     pub nom: String,
     pub prenom: String,
@@ -25,6 +31,13 @@ pub struct Config {
     pub envoyeur: String,
     pub destinataire: String,
     pub entreprise: String,
+}
+
+pub fn build_identity() -> Identity {
+    let path: &Path = Path::new(CONFIG_FILE_PATH);
+    let configuration_file = fs::read_to_string(path).expect("Incapacité de lire le fichier de configuration, le fichier a t'il le bon nomet est-il accessible ?");
+    // TODO: Renvoyez une erreur
+    toml::from_str(&configuration_file).unwrap()
 }
 
 pub fn build_config(form_data: &FormData) -> Config {

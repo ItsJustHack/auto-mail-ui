@@ -1,9 +1,8 @@
-typemail = 2
+# typemail = 2
 # 1 = Premier Contact
 # 2 = Relance
 
-
-[premiercontact]
+[PremierContact]
 mail_path = "./mails/premier_contact"
 objet = "Invitation à la 41ème édition du Forum-Est Horizon"
 attachements = [
@@ -12,7 +11,7 @@ attachements = [
 	"plaquettes/Descriptif_de_l_offre.pdf",
 ]
 
-[relance]
+[Relance]
 mail_path = "./mails/relance"
 objet = "Confirmation de participation au Forum Est-Horizon"
 attachements = [

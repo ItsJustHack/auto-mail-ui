@@ -8,12 +8,12 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::{fs, io};
 
-static EMAIL_TYPE_PATH: &str = "config/email_type.toml";
+pub static EMAIL_TYPE_PATH: &str = "config/email_type.toml";
 
 #[derive(Deserialize)]
-struct MailConfig {
+pub struct MailConfig {
     #[serde(flatten)]
-    mails: HashMap<String, MailContent>,
+    pub mails: HashMap<String, MailContent>,
 }
 
 #[derive(Deserialize)]
@@ -41,10 +41,15 @@ fn create_attachements(mail_content: &MailContent) -> Result<Vec<SinglePart>, io
     Ok(v)
 }
 
+pub fn read_template_file(file_path: String) -> String {
+    let path = Path::new(&file_path);
+    fs::read_to_string(path).unwrap()
+}
+
 fn remplace_text(file_path: String, config: &Config) -> Result<String, io::Error> {
     let path = Path::new(&file_path);
     let original_text = fs::read_to_string(path)?;
-    let original_text = original_text.replace("[Nom de l'entreprise]", &config.entreprise);
+    // let original_text = original_text.replace("[Nom de l'entreprise]", &config.entreprise);
     Ok(original_text.replace(
         "[Votre nom]",
         &format!("{} {}", &config.nom, &config.prenom),
@@ -55,7 +60,7 @@ fn create_id(config: &Config) -> String {
     format!("{} {} <{}>", config.nom, config.prenom, config.envoyeur)
 }
 
-fn read_emails() -> MailConfig {
+pub fn read_emails() -> MailConfig {
     let path = Path::new(EMAIL_TYPE_PATH);
     let configuration_file = fs::read_to_string(path).expect("Incapacité de lire le fichier de type de mail, le fichier a t'il le bon nomet est-il accessible ?");
     toml::from_str(&configuration_file).expect("Mauvais formattage du fichier de configuration")

@@ -1,12 +1,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::ops::Deref;
+use std::fmt::format;
 
-use config::{build_config, Config, FormData};
+use config::{build_config, build_identity, Config, FormData, Identity};
 use error::MailError;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
-use mail_content::build_email;
+use mail_content::{build_email, read_emails, read_template_file, MailConfig};
 
 pub mod config;
 pub mod error;
@@ -14,7 +14,30 @@ pub mod mail_content;
 pub mod mail_credentials;
 
 #[tauri::command]
-fn process_form(data: FormData) -> Result<(), String> {
+fn load_mail_config() -> Result<Vec<String>, String> {
+    let mail_config: MailConfig = read_emails();
+    let mail_names: Vec<String> = mail_config.mails.keys().cloned().collect();
+    Ok(mail_names)
+}
+
+#[tauri::command]
+fn change_message(template_chosen: String) -> String {
+    let mail_config: MailConfig = read_emails();
+    let id: Identity = build_identity();
+
+    read_template_file(
+        mail_config
+            .mails
+            .get(&template_chosen)
+            .unwrap()
+            .mail_path
+            .clone(),
+    )
+    .replace("[Votre nom]", &format!("{} {}", &id.nom, &id.prenom))
+}
+
+#[tauri::command]
+async fn process_form(data: FormData) -> Result<(), String> {
     println!("Received form data: {:?}", data);
     // Faites ce que vous voulez avec les données du formulaire ici.
     let config: Config = build_config(&data);
@@ -45,7 +68,11 @@ fn process_form(data: FormData) -> Result<(), String> {
 fn main() -> () {
     // On admettra ici que votre fichier est à la racine du projet.
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![process_form])
+        .invoke_handler(tauri::generate_handler![
+            process_form,
+            load_mail_config,
+            change_message
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
