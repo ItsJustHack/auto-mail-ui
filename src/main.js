@@ -17,9 +17,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const formData = new FormData(event.target);
       const data = Object.fromEntries(formData.entries());
+      const templateChosen =
+        document.getElementById("mailTemplateSelect").value;
       console.log("Form data:", data); // Ajoutez cette ligne pour déboguer
       try {
-        const response = await invoke("process_form", { data });
+        const response = await invoke("process_form", { data, templateChosen });
         console.log("Form submitted successfully:", response);
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -54,10 +56,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   selectMenu.addEventListener("change", async (event) => {
     console.log("Change button");
     const selectedMail = event.target.value;
-    const message = await invoke("change_message", {
+    const [message, objet] = await invoke("change_message", {
       templateChosen: selectedMail,
     });
-    updateTextField(message);
+    console.log("objet", objet);
+    updateTextField(message, objet);
     originalText = dynamicTextarea.value;
   });
 });
@@ -73,8 +76,10 @@ function updateSelectMenu(mailNames) {
   });
 }
 
-function updateTextField(message) {
+function updateTextField(message, objet) {
   console.log("Si je vois ça on est bon");
   const textField = document.querySelector("#message");
+  const textSubject = document.querySelector("#subject");
   textField.textContent = message;
+  textSubject.value = objet;
 }

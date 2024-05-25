@@ -1,4 +1,4 @@
-use crate::config::Config;
+use crate::config::{Config, FormData};
 use crate::MailError;
 use lettre::message::header::ContentType;
 use lettre::message::{Attachment, MultiPart, SinglePart};
@@ -67,24 +67,29 @@ pub fn read_emails() -> MailConfig {
 }
 
 /// This function takes a config as an argument and returns the formatted email
-pub fn build_email(config: &Config) -> Result<Message, MailError> {
+pub fn build_email(
+    config: &Config,
+    data: &FormData,
+    template_chosen: String,
+) -> Result<Message, MailError> {
     let h: MailConfig = read_emails();
-    let mail_content = h.mails.get("relance").unwrap();
     let email = Message::builder()
         .from(create_id(config).parse().unwrap())
         .to(config.destinataire.parse().unwrap())
         .bcc(config.envoyeur.parse().unwrap())
-        .subject(&mail_content.objet)
+        .subject(&data.subject)
         .multipart(
             // Attache tous les pièces jointes, magie noire parce que j'ai la flemme d'expliquer
-            create_attachements(&mail_content)?.iter().fold(
-                MultiPart::related().singlepart(
-                    SinglePart::builder()
-                        .header(ContentType::TEXT_PLAIN)
-                        .body(remplace_text(mail_content.mail_path.clone(), config)?),
+            create_attachements(&h.mails.get(&template_chosen).unwrap())?
+                .iter()
+                .fold(
+                    MultiPart::related().singlepart(
+                        SinglePart::builder()
+                            .header(ContentType::TEXT_PLAIN)
+                            .body(data.message.clone()),
+                    ),
+                    |acc: MultiPart, el: &SinglePart| acc.singlepart(el.clone()),
                 ),
-                |acc: MultiPart, el: &SinglePart| acc.singlepart(el.clone()),
-            ),
         )?;
     Ok(email)
 }

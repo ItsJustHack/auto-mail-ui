@@ -8,8 +8,8 @@ static CONFIG_FILE_PATH: &str = "./config/config.toml";
 pub struct FormData {
     email: String,
     entreprise: String,
-    subject: String,
-    message: String,
+    pub subject: String,
+    pub message: String,
 }
 
 #[derive(Deserialize)]

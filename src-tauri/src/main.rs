@@ -21,29 +21,38 @@ fn load_mail_config() -> Result<Vec<String>, String> {
 }
 
 #[tauri::command]
-fn change_message(template_chosen: String) -> String {
+fn change_message(template_chosen: String) -> (String, String) {
     let mail_config: MailConfig = read_emails();
     let id: Identity = build_identity();
 
-    read_template_file(
+    (
+        read_template_file(
+            mail_config
+                .mails
+                .get(&template_chosen)
+                .unwrap() // Ne pose pas de problème parce que la clé provient du JS
+                .mail_path
+                .clone(), // On est pas à 2ms près
+        )
+        .replace("[Votre nom]", &format!("{} {}", &id.nom, &id.prenom)),
         mail_config
             .mails
             .get(&template_chosen)
             .unwrap()
-            .mail_path
+            .objet
             .clone(),
     )
-    .replace("[Votre nom]", &format!("{} {}", &id.nom, &id.prenom))
 }
 
 #[tauri::command]
-async fn process_form(data: FormData) -> Result<(), String> {
+async fn process_form(data: FormData, template_chosen: String) -> Result<(), String> {
     println!("Received form data: {:?}", data);
     // Faites ce que vous voulez avec les données du formulaire ici.
     let config: Config = build_config(&data);
     println!("config ok");
     // FIXME: Mail error n'est pas reconnu (ne satisfait pas les traits)
-    let email: Message = build_email(&config).expect("Erreur lors de la construction du mail");
+    let email: Message = build_email(&config, &data, template_chosen)
+        .expect("Erreur lors de la construction du mail");
     println!("email ok");
     let creds: Credentials = mail_credentials::build_credentials();
     println!("creds ok");
