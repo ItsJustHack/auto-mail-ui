@@ -1,7 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::fmt::format;
-
 use config::{build_config, build_identity, Config, FormData, Identity};
 use error::MailError;
 use lettre::transport::smtp::authentication::Credentials;

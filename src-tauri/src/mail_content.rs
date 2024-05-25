@@ -46,16 +46,6 @@ pub fn read_template_file(file_path: String) -> String {
     fs::read_to_string(path).unwrap()
 }
 
-fn remplace_text(file_path: String, config: &Config) -> Result<String, io::Error> {
-    let path = Path::new(&file_path);
-    let original_text = fs::read_to_string(path)?;
-    // let original_text = original_text.replace("[Nom de l'entreprise]", &config.entreprise);
-    Ok(original_text.replace(
-        "[Votre nom]",
-        &format!("{} {}", &config.nom, &config.prenom),
-    ))
-}
-
 fn create_id(config: &Config) -> String {
     format!("{} {} <{}>", config.nom, config.prenom, config.envoyeur)
 }
