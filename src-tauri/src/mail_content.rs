@@ -28,10 +28,8 @@ fn create_attachements(mail_content: &MailContent) -> Result<Vec<SinglePart>, io
     let mut v = Vec::new();
     for file_name in &mail_content.attachements {
         let path = Path::new(file_name);
-        let filebody = fs::read(path).expect(&format!(
-            "Incapacité de lire la pièce jointe suivante : {:?}, arrêt du programme",
-            file_name
-        ));
+        let filebody = fs::read(path).unwrap_or_else(|_| panic!("Incapacité de lire la pièce jointe suivante : {:?}, arrêt du programme",
+            file_name));
         let content_type = ContentType::parse("application/pdf").unwrap();
         v.push(
             Attachment::new(path.file_name().unwrap().to_str().unwrap().to_owned())
@@ -70,7 +68,7 @@ pub fn build_email(
         .subject(&data.subject)
         .multipart(
             // Attache tous les pièces jointes, magie noire parce que j'ai la flemme d'expliquer
-            create_attachements(&h.mails.get(&template_chosen).unwrap())?
+            create_attachements(h.mails.get(&template_chosen).unwrap())?
                 .iter()
                 .fold(
                     MultiPart::related().singlepart(

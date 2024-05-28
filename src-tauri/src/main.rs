@@ -19,9 +19,11 @@ fn load_mail_config() -> Result<Vec<String>, String> {
 }
 
 #[tauri::command]
+/// Returns the body and subject of the mail
 fn change_message(template_chosen: String) -> (String, String) {
     let mail_config: MailConfig = read_emails();
     let id: Identity = build_identity();
+    println!("{:?}", template_chosen);
 
     (
         read_template_file(
@@ -72,7 +74,7 @@ async fn process_form(data: FormData, template_chosen: String) -> Result<(), Str
     Ok(())
 }
 
-fn main() -> () {
+fn main() {
     // On admettra ici que votre fichier est à la racine du projet.
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![

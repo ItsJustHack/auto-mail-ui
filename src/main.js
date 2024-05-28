@@ -23,8 +23,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const response = await invoke("process_form", { data, templateChosen });
         console.log("Form submitted successfully:", response);
+        showNotification("Email Envoyé", "Votre mail a été envoyé avec succès");
       } catch (error) {
         console.error("Error submitting form:", error);
+        showNotification(
+          "Erreur",
+          "Une erreur s'est produite lors de l'envoi de l'email.",
+        );
       }
     });
   } else {
@@ -60,8 +65,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       templateChosen: selectedMail,
     });
     console.log("objet", objet);
+    console.log("message", message);
     updateTextField(message, objet);
     originalText = dynamicTextarea.value;
+
+    const entrepriseName = entrepriseInput.value;
+
+    // Replace the placeholder with the entered company name
+    let updatedText = originalText;
+    if (entrepriseName) {
+      updatedText = originalText.replaceAll(placeholder, entrepriseName);
+    }
+
+    dynamicTextarea.value = updatedText;
   });
 });
 
@@ -80,6 +96,18 @@ function updateTextField(message, objet) {
   console.log("Si je vois ça on est bon");
   const textField = document.querySelector("#message");
   const textSubject = document.querySelector("#subject");
-  textField.textContent = message;
+  textField.value = message;
   textSubject.value = objet;
+}
+
+function showNotification(title, body) {
+  if (Notification.permission === "granted") {
+    new Notification(title, { body });
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        new Notification(title, { body });
+      }
+    });
+  }
 }
