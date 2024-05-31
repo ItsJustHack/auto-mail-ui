@@ -1,10 +1,4 @@
 {
-  "name": "auto-mail-forum-with-ui",
-  "version": "0.0.0",
-  "main": "main.js",
-  "devDependencies": {
-    "@tauri-apps/cli": "^1.5.14"
-  },
   "dependencies": {
     "@tauri-apps/api": "^1.5.6"
   }

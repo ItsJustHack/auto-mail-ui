@@ -1,7 +1,16 @@
-const { invoke } = window.__TAURI__.tauri;
+import { invoke, isPermissionGranted, sendNotification } from "@tauri-apps/api";
 console.log("Script loaded");
 
 document.addEventListener("DOMContentLoaded", async () => {
+  let permissionGranted = await isPermissionGranted();
+  if (!permissionGranted) {
+    const permission = await requestPermission();
+    permissionGranted = permission === "granted";
+  }
+  if (permissionGranted) {
+    sendNotification("Tauri is awesome!");
+    sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
+  }
   try {
     console.log("Initialisation avant load_mail_config");
     const mailNames = await invoke("load_mail_config");

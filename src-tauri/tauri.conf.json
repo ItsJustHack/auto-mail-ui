@@ -2,7 +2,7 @@
   "build": {
     "devPath": "../src",
     "distDir": "../src",
-    "withGlobalTauri": true
+    "withGlobalTauri": false
   },
   "package": {
     "productName": "auto-mail-forum-with-ui",
