@@ -1,4 +1,5 @@
-import { invoke, isPermissionGranted, sendNotification } from "@tauri-apps/api";
+const { invoke } = window.__TAURI__.tauri;
+const { sendNotification, isPermissionGranted } = window.__TAURI__.notification;
 console.log("Script loaded");
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const form = document.getElementById("myForm");
   if (form) {
-    form.addEventListener("submit", async function (event) {
+    form.addEventListener("submit", async function(event) {
       event.preventDefault();
 
       const formData = new FormData(event.target);
