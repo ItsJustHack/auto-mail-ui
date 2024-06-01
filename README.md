@@ -1,7 +1,14 @@
-# Tauri + Vanilla
+# Envoi automatique de Mail
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Javascript.
+Cette application a été développé pour envoyer automatiquement des mails (ici aux entreprises) avec des templates prédéfinis.
 
-## Recommended IDE Setup
+# Configuration
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Lors de la première installation, l'utilisateur doit changer deux fichiers : 
+
+- config.toml
+- credentials.toml
+
+Ces deux fichiers doivent simplement être remplacés avec vos identifiants / noms / prénoms, rien de très compliqué.
+
+De même vous pouvez, si vous le voulez, rajouter davantage de template avec les pièces jointes attachées qui doivent être dans le dossier plaquettes.
