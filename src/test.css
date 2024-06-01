@@ -135,3 +135,18 @@ button:hover {
     margin-bottom: 1rem;
 }
 
+.autocomplete-suggestions {
+    border: 1px solid #e0e0e0;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background-color: gray;
+    z-index: 100;
+}
+.autocomplete-suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+.autocomplete-suggestion:hover {
+    background-color: #1e90ff;
+}

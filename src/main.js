@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const form = document.getElementById("myForm");
   if (form) {
-    form.addEventListener("submit", async function(event) {
+    form.addEventListener("submit", async function (event) {
       event.preventDefault();
 
       const formData = new FormData(event.target);
@@ -88,6 +88,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     dynamicTextarea.value = updatedText;
+  });
+
+  async function fetchEmails() {
+    try {
+      const data = await invoke("get_email_addresses");
+      console.log(data);
+      return data.email_list;
+    } catch (error) {
+      console.error("Failed to fetch emails:", error);
+      return [];
+    }
+  }
+
+  const emails = await fetchEmails();
+  console.log(emails);
+  const emailInput = document.getElementById("email");
+  const autocompleteList = document.getElementById("autocomplete-list");
+
+  emailInput.addEventListener("input", function () {
+    const inputValue = this.value.toLowerCase();
+    autocompleteList.innerHTML = "";
+    if (!inputValue) {
+      return;
+    }
+    const filteredEmails = emails.filter((email) =>
+      email.toLowerCase().includes(inputValue)
+    );
+    filteredEmails.forEach((email) => {
+      const suggestionItem = document.createElement("div");
+      suggestionItem.className = "autocomplete-suggestion";
+      suggestionItem.innerText = email;
+      console.log("Event");
+      suggestionItem.addEventListener("click", function () {
+        emailInput.value = email;
+        autocompleteList.innerHTML = "";
+      });
+      autocompleteList.appendChild(suggestionItem);
+    });
+  });
+
+  document.addEventListener("click", function (e) {
+    if (e.target !== emailInput) {
+      autocompleteList.innerHTML = "";
+    }
   });
 });
 

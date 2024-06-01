@@ -15,8 +15,11 @@
     <div class="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col items-center justify-center">
       <h1 class="text-3xl font-bold mb-4">Automatic Mail Sender</h1>
       <form id="myForm" class="w-full max-w-md p-4 bg-zinc-100 dark:bg-zinc-700 shadow-md rounded-lg">
+        <div style="position: relative; ">
         <label for="email" class="block mb-2">Recipient Email:</label>
         <input type="email" id="email" name="email" class="w-full px-3 py-2 mb-4 border rounded-lg text-black" placeholder="Enter recipient email">
+          <div id="autocomplete-list" class="autocomplete-suggestions"></div>
+        </div>
         <label for="entreprise" class="block mb-2">Entreprise:</label>
         <input type="text" id="entreprise" name="entreprise" class="w-full px-3 py-2 mb-4 border rounded-lg text-black" placeholder="Enter entreprise name">
         <label for="subject" class="block mb-2">Subject:</label>

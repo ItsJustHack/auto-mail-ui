@@ -1,10 +1,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::fs;
+
 use config::{build_config, build_identity, Config, FormData, Identity};
 use error::MailError;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 use mail_content::{build_email, read_emails, read_template_file, MailConfig};
+use serde::Serialize;
 use tauri::api::shell::open;
 use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
@@ -13,11 +16,27 @@ pub mod error;
 pub mod mail_content;
 pub mod mail_credentials;
 
+#[derive(Serialize)]
+struct EmailList {
+    email_list: Vec<String>,
+}
+
 #[tauri::command]
 fn load_mail_config() -> Result<Vec<String>, String> {
     let mail_config: MailConfig = read_emails();
     let mail_names: Vec<String> = mail_config.mails.keys().cloned().collect();
     Ok(mail_names)
+}
+
+#[tauri::command]
+fn get_email_addresses() -> EmailList {
+    let temp: Vec<String> = fs::read_to_string("./email_list/aprod_users.csv")
+        .unwrap()
+        .split("\n")
+        .map(|x| x.to_string())
+        .collect();
+
+    EmailList { email_list: temp }
 }
 
 #[tauri::command]
@@ -120,6 +139,7 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
+            get_email_addresses,
             process_form,
             load_mail_config,
             change_message
