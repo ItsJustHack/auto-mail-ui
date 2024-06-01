@@ -1,16 +1,11 @@
 const { invoke } = window.__TAURI__.tauri;
-const { sendNotification, isPermissionGranted } = window.__TAURI__.notification;
-console.log("Script loaded");
+const { isPermissionGranted } = window.__TAURI__.notification;
 
 document.addEventListener("DOMContentLoaded", async () => {
   let permissionGranted = await isPermissionGranted();
   if (!permissionGranted) {
     const permission = await requestPermission();
     permissionGranted = permission === "granted";
-  }
-  if (permissionGranted) {
-    sendNotification("Tauri is awesome!");
-    sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
   }
   try {
     console.log("Initialisation avant load_mail_config");
@@ -20,6 +15,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error loading mail config:", error);
   }
 
+  submit_form();
+
+  replace_entreprise();
+
+  autocomplete_email();
+});
+
+function submit_form() {
   const form = document.getElementById("myForm");
   if (form) {
     form.addEventListener("submit", async function (event) {
@@ -29,7 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = Object.fromEntries(formData.entries());
       const templateChosen =
         document.getElementById("mailTemplateSelect").value;
-      console.log("Form data:", data); // Ajoutez cette ligne pour déboguer
       try {
         const response = await invoke("process_form", { data, templateChosen });
         console.log("Form submitted successfully:", response);
@@ -45,7 +47,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     console.error('Form with ID "myForm" not found.');
   }
+}
 
+function replace_entreprise() {
   // Ce code replace l'entreprise
 
   const entrepriseInput = document.getElementById("entreprise");
@@ -89,20 +93,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     dynamicTextarea.value = updatedText;
   });
+}
 
-  async function fetchEmails() {
-    try {
-      const data = await invoke("get_email_addresses");
-      console.log(data);
-      return data.email_list;
-    } catch (error) {
-      console.error("Failed to fetch emails:", error);
-      return [];
-    }
-  }
-
+async function autocomplete_email() {
   const emails = await fetchEmails();
-  console.log(emails);
   const emailInput = document.getElementById("email");
   const autocompleteList = document.getElementById("autocomplete-list");
 
@@ -133,7 +127,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       autocompleteList.innerHTML = "";
     }
   });
-});
+}
+
+async function fetchEmails() {
+  try {
+    const data = await invoke("get_email_addresses");
+    console.log(data);
+    return data.email_list;
+  } catch (error) {
+    console.error("Failed to fetch emails:", error);
+    return [];
+  }
+}
 
 function updateSelectMenu(mailNames) {
   console.log("Mise à jour des options");
