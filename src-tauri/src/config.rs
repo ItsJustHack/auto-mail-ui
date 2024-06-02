@@ -25,6 +25,7 @@ pub struct FileConfig {
     pub envoyeur: String,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Config {
     pub nom: String,
     pub prenom: String,
@@ -40,11 +41,8 @@ pub fn build_identity() -> Identity {
     toml::from_str(&configuration_file).unwrap()
 }
 
-pub fn build_config(form_data: &FormData) -> Config {
-    // This helps to have a universal binary that also works on Windows
-    let path: &Path = Path::new(CONFIG_FILE_PATH);
-    let configuration_file = fs::read_to_string(path).expect("Incapacité de lire le fichier de configuration, le fichier a t'il le bon nomet est-il accessible ?");
-
+/// This function takes a FormData which is parsed when the form is sent and the content of the configuration file in a string
+pub fn build_config(form_data: &FormData, configuration_file: &str) -> Config {
     let file_config: FileConfig = toml::from_str(&configuration_file)
         .expect("Mauvais formattage du fichier de configuration");
     Config {
@@ -53,5 +51,47 @@ pub fn build_config(form_data: &FormData) -> Config {
         envoyeur: file_config.envoyeur.clone(),
         destinataire: form_data.email.clone(),
         entreprise: form_data.entreprise.clone(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn test_build_config_panic() {
+        let f: FormData = FormData {
+            email: "dummy@example.com".into(),
+            entreprise: "Renault".into(),
+            subject: "Mon objet de mail".into(),
+            message: "Corps de mail".into(),
+        };
+        build_config(&f, "");
+    }
+
+    #[test]
+    fn test_build_config() {
+        let f: FormData = FormData {
+            email: "dummy@example.com".into(),
+            entreprise: "Renault".into(),
+            subject: "Mon objet de mail".into(),
+            message: "Corps de mail".into(),
+        };
+        let config_str = r#"
+        envoyeur = "email@est-horizon.com"
+        nom = "nom"
+        prenom = "prenom"
+        "#;
+        assert_eq!(
+            build_config(&f, config_str),
+            Config {
+                nom: "nom".into(),
+                prenom: "prenom".into(),
+                envoyeur: "email@est-horizon.com".into(),
+                destinataire: "dummy@example.com".into(),
+                entreprise: "Renault".into()
+            }
+        )
     }
 }
