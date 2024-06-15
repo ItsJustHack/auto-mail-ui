@@ -63,6 +63,7 @@ fn change_signature(config: &Config) -> String {
     let path = Path::new(SIGNATURE_PATH);
     fs::read_to_string(path)
         .expect("Temporary error")
+        .replace("\n", "")
         .replace("[Nom]", &format!("{} {}", config.nom, config.prenom))
         .replace("[Mail]", &config.envoyeur)
         .replace("[Telephone]", &config.telephone)
