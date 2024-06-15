@@ -9,6 +9,7 @@ use std::path::Path;
 use std::{fs, io};
 
 pub static EMAIL_TYPE_PATH: &str = "config/email_type.toml";
+pub static SIGNATURE_PATH: &str = "mails/signature";
 
 #[derive(Deserialize)]
 pub struct MailConfig {
@@ -58,12 +59,26 @@ pub fn read_emails() -> MailConfig {
     toml::from_str(&configuration_file).expect("Mauvais formattage du fichier de configuration")
 }
 
+fn change_signature(config: &Config) -> String {
+    let path = Path::new(SIGNATURE_PATH);
+    fs::read_to_string(path)
+        .expect("Temporary error")
+        .replace("[Nom]", &format!("{} {}", config.nom, config.prenom))
+        .replace("[Mail]", &config.envoyeur)
+        .replace("[Telephone]", &config.telephone)
+}
+
 /// This function takes a config as an argument and returns the formatted email
 pub fn build_email(
     config: &Config,
     data: &FormData,
     template_chosen: String,
 ) -> Result<Message, MailError> {
+    let header: String = r#"
+        <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head><body style='font-size: 10pt'>"#
+    .into();
+    println!("{:?}", change_signature(&config));
+
     let h: MailConfig = read_emails();
     let email = Message::builder()
         .from(create_id(config).parse().unwrap())
@@ -72,53 +87,15 @@ pub fn build_email(
         .subject(&data.subject)
         .multipart(
             // Attache tous les pièces jointes, magie noire parce que j'ai la flemme d'expliquer
-            create_attachements(h.mails.get(&template_chosen).unwrap())?
+            create_attachements(&h.mails.get(&template_chosen).unwrap())?
                 .iter()
                 .fold(
-                    MultiPart::related().singlepart(
-                        SinglePart::builder()
-                            .header(ContentType::TEXT_HTML)
-                            .body::<String>(
-                                r#"
-<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; charset
-=3DUTF-8" /></head><body style=3D'font-size: 10pt'>
-<div class=3D"pre" style=3D"margin: 0; padding: 0; font-family: monospace">
-Sale merde&nbsp;<br />
-<div id=3D"signature">-- <br />
-<div style=3D"float: left top;">
-<table class=3D"table" style=3D"border: 0px;">
-<tbody>
-<tr>
-<td rowspan=3D"6"><img style=3D"height: 160px; text-align: center; vertical-align: middle;" src=3D"http://www.est-horizon.com/upload/FEH-logo.jpg" /></td>
-<td style=3D"font-family: Calibri,Arial;"><span style=3D"font-size: 12pt;">
-<strong style=3D"font-size: 1.3em;">Thomas BERTOZZO </strong>- <a style=3D"color: rgba(64, 64, 64, 1); font-size: 1.1em; text-decoration: none;">
-<a>Relations Entreprises du Forum Est-Horizon 2024</a></span></td>
-</tr>
-<tr>
-<td style=3D"color: rgba(64, 64, 64, 1); font-size: 1.1em; font-family: Calibri,Arial;">Elève ingénieur de l'Ecole des Mines Nancy</td>
-</tr>
-<tr>
-<td style=3D"color: rgba(64, 64, 64, 1); font-size: 1.1em; font-family: Calibri,Arial;">Campus Artem - 92, Rue du Sergent Blandan; 54000 Nancy</td>
-</tr>
-<tr>
-<td style=3D"color: rgba(64, 64, 64, 1); font-size: 1.1em; font-family: Calibri,Arial;">Téléphone : +33 (0)<span>7 82 64 07 57</span></td>
-</tr>
-<tr>
-<td style=3D"color: rgba(64, 64, 64, 1); font-size: 1.1em; font-family: Calibri,Arial;">Mail : <span>bertozzo.thomas</span><span>@est</span><span>-horizon</span><span>.com</span></td>
-</tr>
-<tr>
-<td style=3D"color: rgba(64, 64, 64, 1); font-size: 1.1em; font-family: Calibri,Arial;">Site internet : <a style=3D"text-decoration: none; color: rgba(64, 64, 64, 1);" href=3D"http://www.est-horizon.com/">www.est-horizon.com</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</body></html>
-"#
-                                .into(),
-                            ),
-                    ),
+                    MultiPart::related().singlepart(SinglePart::html(format!(
+                        "{}{}{}",
+                        header,
+                        data.message.clone(),
+                        change_signature(&config)
+                    ))),
                     |acc: MultiPart, el: &SinglePart| acc.singlepart(el.clone()),
                 ),
         )?;

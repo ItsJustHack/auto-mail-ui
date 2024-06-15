@@ -46,10 +46,10 @@
       "targets": "all",
       "identifier": "com.auto-mail-ui.dev",
       "resources": [
-       "config/*",
-       "email_list/*",
-       "mails/*",
-       "plaquettes/*"
+       "./config/*",
+       "./email_list/*",
+       "./mails/*",
+       "./plaquettes/*"
       ],
       "icon": [
         "icons/32x32.png",

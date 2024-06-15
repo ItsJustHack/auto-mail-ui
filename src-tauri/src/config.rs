@@ -23,6 +23,7 @@ pub struct FileConfig {
     pub nom: String,
     pub prenom: String,
     pub envoyeur: String,
+    pub telephone: String,
 }
 
 #[derive(Debug, PartialEq)]
@@ -32,6 +33,7 @@ pub struct Config {
     pub envoyeur: String,
     pub destinataire: String,
     pub entreprise: String,
+    pub telephone: String,
 }
 
 pub fn build_identity() -> Identity {
@@ -49,6 +51,7 @@ pub fn build_config(form_data: &FormData, configuration_file: &str) -> Config {
         nom: file_config.nom.clone(),
         prenom: file_config.prenom.clone(),
         envoyeur: file_config.envoyeur.clone(),
+        telephone: file_config.telephone.clone(),
         destinataire: form_data.email.clone(),
         entreprise: form_data.entreprise.clone(),
     }
@@ -89,6 +92,7 @@ mod tests {
                 nom: "nom".into(),
                 prenom: "prenom".into(),
                 envoyeur: "email@est-horizon.com".into(),
+                telephone: "07 83 92 39 13".into(),
                 destinataire: "dummy@example.com".into(),
                 entreprise: "Renault".into()
             }

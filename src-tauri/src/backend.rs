@@ -3,7 +3,6 @@
 use std::fs;
 
 use crate::config::{build_config, build_identity, Config, FormData, Identity};
-use crate::error::MailError;
 use crate::mail_content::{build_email, read_emails, read_template_file, MailConfig};
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
@@ -42,8 +41,6 @@ pub fn get_email_addresses() -> EmailList {
 pub fn change_message(template_chosen: String) -> (String, String) {
     let mail_config: MailConfig = read_emails();
     let id: Identity = build_identity();
-    println!("{:?}", template_chosen);
-
     (
         read_template_file(
             mail_config
@@ -53,7 +50,9 @@ pub fn change_message(template_chosen: String) -> (String, String) {
                 .mail_path
                 .clone(), // On est pas à 2ms près
         )
-        .replace("[Votre nom]", &format!("{} {}", &id.nom, &id.prenom)),
+        .replace("[Votre nom]", &format!("{} {}", &id.nom, &id.prenom))
+        .replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the
+        // moment
         mail_config
             .mails
             .get(&template_chosen)
