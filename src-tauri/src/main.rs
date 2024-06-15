@@ -12,7 +12,7 @@ pub mod mail_content;
 pub mod mail_credentials;
 
 fn open_file_with_default_editor(window: &tauri::Window, file_path: &str) {
-    let _ = open(&window.shell_scope(), file_path.to_string(), None);
+    let _ = open(&window.shell_scope(), file_path, None);
 }
 
 fn main() {

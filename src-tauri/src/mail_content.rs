@@ -63,7 +63,7 @@ fn change_signature(config: &Config) -> String {
     let path = Path::new(SIGNATURE_PATH);
     fs::read_to_string(path)
         .expect("Temporary error")
-        .replace("\n", "")
+        .replace('\n', "")
         .replace("[Nom]", &format!("{} {}", config.nom, config.prenom))
         .replace("[Mail]", &config.envoyeur)
         .replace("[Telephone]", &config.telephone)
@@ -78,7 +78,7 @@ pub fn build_email(
     let header: String = r#"
         <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head><body style='font-size: 10pt'>"#
     .into();
-    println!("{:?}", change_signature(&config));
+    println!("{:?}", change_signature(config));
 
     let h: MailConfig = read_emails();
     let email = Message::builder()
@@ -88,14 +88,14 @@ pub fn build_email(
         .subject(&data.subject)
         .multipart(
             // Attache tous les pièces jointes, magie noire parce que j'ai la flemme d'expliquer
-            create_attachements(&h.mails.get(&template_chosen).unwrap())?
+            create_attachements(h.mails.get(&template_chosen).unwrap())?
                 .iter()
                 .fold(
                     MultiPart::related().singlepart(SinglePart::html(format!(
                         "{}{}{}",
                         header,
-                        data.message.clone().replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the moment
-                        change_signature(&config)
+                        data.message.clone().replace('\n', "<br>"), // To transform into HTML, very moche but I don't care for the moment
+                        change_signature(config)
                     ))),
                     |acc: MultiPart, el: &SinglePart| acc.singlepart(el.clone()),
                 ),

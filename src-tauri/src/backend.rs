@@ -29,7 +29,7 @@ pub fn load_mail_config() -> Result<Vec<String>, String> {
 pub fn get_email_addresses() -> EmailList {
     let temp: Vec<String> = fs::read_to_string("./email_list/aprod_users.csv")
         .unwrap()
-        .split("\n")
+        .split('\n')
         .map(|x| x.to_string())
         .collect();
 

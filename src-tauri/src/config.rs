@@ -45,7 +45,7 @@ pub fn build_identity() -> Identity {
 
 /// This function takes a FormData which is parsed when the form is sent and the content of the configuration file in a string
 pub fn build_config(form_data: &FormData, configuration_file: &str) -> Config {
-    let file_config: FileConfig = toml::from_str(&configuration_file)
+    let file_config: FileConfig = toml::from_str(configuration_file)
         .expect("Mauvais formattage du fichier de configuration");
     Config {
         nom: file_config.nom.clone(),
