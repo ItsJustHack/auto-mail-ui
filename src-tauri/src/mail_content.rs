@@ -93,7 +93,7 @@ pub fn build_email(
                     MultiPart::related().singlepart(SinglePart::html(format!(
                         "{}{}{}",
                         header,
-                        data.message.clone(),
+                        data.message.clone().replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the moment
                         change_signature(&config)
                     ))),
                     |acc: MultiPart, el: &SinglePart| acc.singlepart(el.clone()),

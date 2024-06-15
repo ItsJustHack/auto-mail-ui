@@ -50,8 +50,7 @@ pub fn change_message(template_chosen: String) -> (String, String) {
                 .mail_path
                 .clone(), // On est pas à 2ms près
         )
-        .replace("[Votre nom]", &format!("{} {}", &id.nom, &id.prenom))
-        .replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the
+        .replace("[Votre nom]", &format!("{} {}", &id.nom, &id.prenom)),
         // moment
         mail_config
             .mails
