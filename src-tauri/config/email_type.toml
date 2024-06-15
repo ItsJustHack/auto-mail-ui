@@ -1,7 +1,3 @@
-# typemail = 2
-# 1 = Premier Contact
-# 2 = Relance
-
 [PremierContact]
 mail_path = "./mails/premier_contact"
 objet = "Invitation à la 41ème édition du Forum-Est Horizon"

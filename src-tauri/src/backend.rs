@@ -3,13 +3,14 @@
 use std::fs;
 
 use crate::config::{build_config, build_identity, Config, FormData, Identity};
+use crate::get_resource_path;
 use crate::mail_content::{build_email, read_emails, read_template_file, MailConfig};
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 use serde::Serialize;
-use std::path::Path;
 
 static CONFIG_FILE_PATH: &str = "./config/config.toml";
+static EMAIL_LIST_PATH: &str = "./email_list/aprod_users.csv";
 
 #[derive(Serialize)]
 pub struct EmailList {
@@ -27,7 +28,8 @@ pub fn load_mail_config() -> Result<Vec<String>, String> {
 #[tauri::command]
 /// This function returns all the email already known, inside the "aprod_users.csv file
 pub fn get_email_addresses() -> EmailList {
-    let temp: Vec<String> = fs::read_to_string("./email_list/aprod_users.csv")
+    let path = get_resource_path().unwrap().join(EMAIL_LIST_PATH);
+    let temp: Vec<String> = fs::read_to_string(path)
         .unwrap()
         .split('\n')
         .map(|x| x.to_string())
@@ -62,7 +64,7 @@ pub fn change_message(template_chosen: String) -> (String, String) {
 }
 
 fn read_config_file(path: &str) -> String {
-    let path: &Path = Path::new(path);
+    let path = get_resource_path().unwrap().join(path);
     fs::read_to_string(path).expect("Incapacité de lire le fichier de configuration, le fichier a t'il le bon nomet est-il accessible ?")
 }
 
