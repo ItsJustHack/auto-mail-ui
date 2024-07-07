@@ -67,7 +67,7 @@ fn read_config_file(path: &str) -> String {
     let path = get_resource_path().unwrap().join(path);
     fs::read_to_string(path).expect("Incapacité de lire le fichier de configuration, le fichier a t'il le bon nomet est-il accessible ?")
 }
-
+use lettre::message::Mailbox;
 #[tauri::command]
 pub async fn process_form(data: FormData, template_chosen: String) -> Result<(), String> {
     // println!("Received form data: {:?}", data);
@@ -77,9 +77,8 @@ pub async fn process_form(data: FormData, template_chosen: String) -> Result<(),
     // FIXME: Mail error n'est pas reconnu (ne satisfait pas les traits)
     let email: Message = build_email(&config, &data, template_chosen)
         .expect("Erreur lors de la construction du mail");
-    // println!("email ok");
+
     let creds: Credentials = crate::mail_credentials::build_credentials();
-    // println!("creds ok");
 
     // Open a remote connection to smtp server
     let mailer = SmtpTransport::relay("ssl0.ovh.net")
@@ -88,12 +87,9 @@ pub async fn process_form(data: FormData, template_chosen: String) -> Result<(),
         .build();
 
     // Send the email
-    // println!("Prêt à l'envoi");
     match mailer.send(&email) {
-        Ok(_) => println!("Mail sent successfully"),
+        Ok(c) => println!("Mail sent successfully, {:?}", c),
         Err(e) => println!("{:?}", e),
     }
-    // println!("Mail normalement envoyé");
-    //
     Ok(())
 }

@@ -8,6 +8,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::Path;
 use std::{fs, io};
+use tauri::http::header::CONTENT_TYPE;
 
 pub static EMAIL_TYPE_PATH: &str = "config/email_type.toml";
 pub static SIGNATURE_PATH: &str = "mails/signature";
@@ -80,19 +81,27 @@ pub fn build_email(
     let header: String = r#"
         <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head><body style='font-size: 10pt'>"#
     .into();
-
     let h: MailConfig = read_emails();
     let email = Message::builder()
         .from(create_id(config).parse().unwrap())
         .to(config.destinataire.parse().unwrap())
         .bcc(config.envoyeur.parse().unwrap())
         .subject(&data.subject)
+        // .header(ContentType::TEXT_HTML)
+        /*
+            .body(format!(
+                "{}{}{}",
+                header,
+                data.message.clone().replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the moment
+                change_signature(&config)
+            ));
+        */
         .multipart(
             // Attache tous les pièces jointes, magie noire parce que j'ai la flemme d'expliquer
             create_attachements(&h.mails.get(&template_chosen).unwrap())?
                 .iter()
                 .fold(
-                    MultiPart::related().singlepart(SinglePart::html(format!(
+                    MultiPart::mixed().singlepart(SinglePart::html(format!(
                         "{}{}{}",
                         header,
                         data.message.clone().replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the moment
