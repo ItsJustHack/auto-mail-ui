@@ -101,7 +101,7 @@ pub fn build_email(
             create_attachements(&h.mails.get(&template_chosen).unwrap())?
                 .iter()
                 .fold(
-                    MultiPart::mixed().singlepart(SinglePart::html(format!(
+                    MultiPart::alternative().singlepart(SinglePart::html(format!(
                         "{}{}{}",
                         header,
                         data.message.clone().replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the moment
