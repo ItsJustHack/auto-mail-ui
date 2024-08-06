@@ -1,9 +1,9 @@
 use serde::Deserialize;
 use std::fs;
 
-use crate::get_resource_path;
+use crate::{get_config_path};
 
-static CONFIG_FILE_PATH: &str = "./config/config.toml";
+static CONFIG_FILE_PATH: &str = "config.toml";
 
 #[derive(serde::Deserialize, Debug)]
 pub struct FormData {
@@ -38,7 +38,8 @@ pub struct Config {
 }
 
 pub fn build_identity() -> Identity {
-    let path = get_resource_path().unwrap().join(CONFIG_FILE_PATH);
+    let path = get_config_path().unwrap().join(CONFIG_FILE_PATH);
+    println!("{:?}", path);
     let configuration_file = fs::read_to_string(path).expect("Incapacité de lire le fichier de configuration, le fichier a t'il le bon nomet est-il accessible ?");
     // TODO: Renvoyez une erreur
     toml::from_str(&configuration_file).unwrap()
@@ -46,6 +47,7 @@ pub fn build_identity() -> Identity {
 
 /// This function takes a FormData which is parsed when the form is sent and the content of the configuration file in a string
 pub fn build_config(form_data: &FormData, configuration_file: &str) -> Config {
+    println!("{:?}", configuration_file);
     let file_config: FileConfig =
         toml::from_str(configuration_file).expect("Mauvais formattage du fichier de configuration");
     Config {

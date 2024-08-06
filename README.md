@@ -4,12 +4,7 @@ Cette application a été développée pour envoyer automatiquement des mails (i
 
 # Configuration
 
-Lors de la première installation, l'utilisateur doit changer deux fichiers, ces deux fichiers se situent dans le dossier d'installation (sur Windows C:\Program Files\auto-mail-forum\config par défaut) (sur Mac il faut faire un clic droit sur l'application et ouvrir le dossier de l'application)  : 
-
-- config.toml
-- credentials.toml
-
-Ces deux fichiers doivent simplement être remplacés avec vos identifiants / noms / prénoms, ...
+Lors de la première installation, l'utilisateur doit changer appuyer sur le bouton en haut à gauche pour définir leur identité. Il suffit de remplir les champs désirés relatif à l'utilisateur.
 
 # Ajoutez des templates / Pièces jointes
 

@@ -12,7 +12,7 @@ edition = "2021"
 tauri-build = { version = "1", features = [] }
 
 [dependencies]
-tauri = { version = "1", features = [
+tauri = { version = "1", features = [ "updater",
 	"notification-all",
 	"window-close",
 	"window-show",
@@ -29,6 +29,7 @@ serde_json = "1"
 lettre = "0.11"
 toml = "0.4.2"
 lazy_static = "1.4.0"
+dirs = "5.0.1"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

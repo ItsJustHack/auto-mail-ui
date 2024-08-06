@@ -9,9 +9,17 @@ attachements = [
 
 [Relance]
 mail_path = "./mails/relance"
-objet = "Confirmation de participation au Forum Est-Horizon"
+objet = "Relance sur la participation au Forum Est-Horizon"
 attachements = [
 	"plaquettes/Aide_inscription.pdf",
 	"plaquettes/Presentation_Forum_Est_Horizon.pdf",
 	"plaquettes/Descriptif_de_l_offre.pdf",
+]
+
+[GuideExposant]
+mail_path = "./mails/guide_exposant"
+objet = "Guide de l’exposant pour le Forum Est-Horizon"
+attachements = [
+	"plaquettes/Guide_de_l_exposant.pdf",
+	"plaquettes/CATALOGUE_COMPLET_PRESTATIONS_COMPLEMENTAIRES.pdf",
 ]

@@ -3,18 +3,58 @@
 use std::fs;
 
 use crate::config::{build_config, build_identity, Config, FormData, Identity};
-use crate::get_resource_path;
 use crate::mail_content::{build_email, read_emails, read_template_file, MailConfig};
+use crate::{get_config_path, get_resource_path};
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-static CONFIG_FILE_PATH: &str = "./config/config.toml";
+static CONFIG_FILE_PATH: &str = "config.toml";
 static EMAIL_LIST_PATH: &str = "./email_list/aprod_users.csv";
 
 #[derive(Serialize)]
 pub struct EmailList {
     email_list: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct RegistrationSignatureInformation {
+    nom: String,
+    prenom: String,
+    telephone: String,
+    envoyeur: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct RegistrationCredentialsInformation {
+    username: String,
+    password: String,
+}
+
+#[tauri::command]
+pub fn save_config(
+    config: RegistrationSignatureInformation,
+    credentials: RegistrationCredentialsInformation,
+) -> Result<(), String> {
+    let config_path = get_config_path().unwrap();
+
+    // Créer le dossier de configuration s'il n'existe pas, pour une raison obscure il peut ne pas
+    // exister
+    if !config_path.exists() {
+        fs::create_dir_all(&config_path).map_err(|e| e.to_string())?;
+    }
+
+    let config_file_path = config_path.join("config.toml"); // Chemin vers le fichier de configuration
+    let credentials_path = config_path.join("credentials.toml"); // Chemin vers le fichier de credentials
+
+    println!("{:?}", config_path);
+    let config_toml = toml::to_string(&config).map_err(|e| e.to_string())?;
+    fs::write(config_file_path, config_toml).map_err(|e| e.to_string())?;
+
+    let credentials_toml = toml::to_string(&credentials).map_err(|e| e.to_string())?;
+    fs::write(credentials_path, credentials_toml).map_err(|e| e.to_string())?;
+
+    Ok(())
 }
 
 #[tauri::command]
@@ -64,10 +104,11 @@ pub fn change_message(template_chosen: String) -> (String, String) {
 }
 
 fn read_config_file(path: &str) -> String {
-    let path = get_resource_path().unwrap().join(path);
+    let path = get_config_path().unwrap().join(path);
+    println!("{:?}", path);
     fs::read_to_string(path).expect("Incapacité de lire le fichier de configuration, le fichier a t'il le bon nomet est-il accessible ?")
 }
-use lettre::message::Mailbox;
+
 #[tauri::command]
 pub async fn process_form(data: FormData, template_chosen: String) -> Result<(), String> {
     // println!("Received form data: {:?}", data);

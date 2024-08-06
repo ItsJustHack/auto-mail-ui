@@ -6,7 +6,7 @@
   },
   "package": {
     "productName": "auto-mail-forum-with-ui",
-    "version": "0.0.0"
+    "version": "1.0.7"
   },
   "tauri": {
     "allowlist": {
@@ -44,7 +44,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.auto-mail-ui.dev",
+      "identifier": "auto-mail-ui",
       "resources": [
        "./config/*",
        "./email_list/*",
@@ -62,7 +62,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://github.com/ItsJustHack/auto-mail-ui/tree/main/latest.json"
+        "https://github.com/ItsJustHack/auto-mail-ui/releases/latest/download/latest.json"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEUxRUIxNTlDQUJDMEY3MDYKUldRRzk4Q3JuQlhyNFZpWk1Td1FFY0o2Y3Z2S0JLUUZFQUdqYnZnc2pRVnVGSnFuQ3VpM01jN3MK"

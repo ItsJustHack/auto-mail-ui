@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration</title>
+    <link rel="stylesheet" href="configuration.css">
+</head>
+<body>
+    <div id="config-modal" class="modal">
+        <div class="modal-content">
+            <h2>Changer configuration</h2>
+            <form id="config-form">
+                <label>Nom: <input type="text" name="nom" id="nom"></label>
+                <label>Prénom: <input type="text" name="prenom" id="prenom"></label>
+                <label>Email: <input type="email" name="email" id="email"></label>
+                <label>Mot de passe: <input type="password" name="password" id="password"></label>
+                <label>Numéro de téléphone: <input type="text" name="phone" id="phone"></label>
+                <button type="submit">Enregistrer</button>
+                <button type="button" id="cancel-btn">Annuler</button>
+            </form>
+        </div>
+    </div>
+    <script src="configuration.js"></script>
+</body>
+</html>
