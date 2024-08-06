@@ -1,11 +1,12 @@
 // config.js
 document.addEventListener("DOMContentLoaded", () => {
   const { invoke } = window.__TAURI__.tauri;
+  const { appWindow } = window.__TAURI__.window;
   const form = document.getElementById("config-form");
   const cancelBtn = document.getElementById("cancel-btn");
 
   cancelBtn.addEventListener("click", () => {
-    window.close();
+    appWindow.close();
   });
 
   form.addEventListener("submit", (e) => {
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     invoke("save_config", { config: formData, credentials: credentials })
       .then(() => {
         alert("Configuration enregistrée avec succès!");
-        window.close();
+        appWindow.close();
       })
       .catch((error) => {
         console.error(
