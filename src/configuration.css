@@ -1,0 +1,62 @@
+/* config.css */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.modal-content {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 10px;
+}
+
+input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #2b2b2b;
+    color: #e0e0e0;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+}
+
+button[type="button"] {
+    background-color: #f44336;
+    color: white;
+    margin-top: 10px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
