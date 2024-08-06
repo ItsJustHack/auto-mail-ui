@@ -6,9 +6,9 @@ use lettre::message::{Attachment, MultiPart, SinglePart};
 use lettre::Message;
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::path::Path;
+
 use std::{fs, io};
-use tauri::http::header::CONTENT_TYPE;
+
 
 pub static EMAIL_TYPE_PATH: &str = "config/email_type.toml";
 pub static SIGNATURE_PATH: &str = "mails/signature";

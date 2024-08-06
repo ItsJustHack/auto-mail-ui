@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use std::fs;
 
-use crate::{get_config_path, get_resource_path};
+use crate::{get_config_path};
 
 static CONFIG_FILE_PATH: &str = "config.toml";
 
