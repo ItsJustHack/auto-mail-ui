@@ -1,9 +1,9 @@
-use crate::get_resource_path;
+use crate::get_config_path;
 use lettre::transport::smtp::authentication::Credentials;
 use serde::Deserialize;
 use std::fs;
 
-static CREDENTIAL_PATH: &str = "config/credentials.toml";
+static CREDENTIAL_PATH: &str = "credentials.toml";
 
 #[derive(Deserialize)]
 struct MailCredentials {
@@ -12,7 +12,7 @@ struct MailCredentials {
 }
 
 pub fn build_credentials() -> Credentials {
-    let path = get_resource_path().unwrap().join(CREDENTIAL_PATH);
+    let path = get_config_path().unwrap().join(CREDENTIAL_PATH);
     let creds = fs::read_to_string(path).expect("incapacité de lire le fichier de credentials");
     let mail_credentials: MailCredentials =
         toml::from_str(&creds).expect("Fichier de credentials mal formatté");

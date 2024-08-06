@@ -87,15 +87,6 @@ pub fn build_email(
         .to(config.destinataire.parse().unwrap())
         .bcc(config.envoyeur.parse().unwrap())
         .subject(&data.subject)
-        // .header(ContentType::TEXT_HTML)
-        /*
-            .body(format!(
-                "{}{}{}",
-                header,
-                data.message.clone().replace("\n", "<br>"), // To transform into HTML, very moche but I don't care for the moment
-                change_signature(&config)
-            ));
-        */
         .multipart(
             // Attache tous les pièces jointes, magie noire parce que j'ai la flemme d'expliquer
             create_attachements(&h.mails.get(&template_chosen).unwrap())?

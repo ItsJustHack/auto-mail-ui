@@ -6,7 +6,7 @@
   },
   "package": {
     "productName": "auto-mail-forum-with-ui",
-    "version": "1.0.4"
+    "version": "1.0.5"
   },
   "tauri": {
     "allowlist": {
@@ -44,7 +44,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.auto-mail-ui.dev",
+      "identifier": "auto-mail-ui",
       "resources": [
        "./config/*",
        "./email_list/*",
