@@ -6,7 +6,7 @@
   },
   "package": {
     "productName": "auto-mail-forum-with-ui",
-    "version": "0.0.0"
+    "version": "1.0.2"
   },
   "tauri": {
     "allowlist": {
