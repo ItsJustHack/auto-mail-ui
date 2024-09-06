@@ -23,3 +23,36 @@ attachements = [
 	"plaquettes/Guide_de_l_exposant.pdf",
 	"plaquettes/CATALOGUE_COMPLET_PRESTATIONS_COMPLEMENTAIRES.pdf",
 ]
+
+[PackPartenaire]
+mail_path = "./mails/pack_partenaire"
+objet = "Forum Est-Horizon : Informations sur votre sélection du pack Partenaire"
+attachements = [
+	"plaquettes/Guide_de_l_exposant.pdf",
+	"plaquettes/CATALOGUE_COMPLET_PRESTATIONS_COMPLEMENTAIRES.pdf",
+]
+
+[PackOr]
+mail_path = "./mails/pack_or"
+objet = "Forum Est-Horizon : Informations sur votre sélection du pack Or"
+attachements = [
+	"plaquettes/Guide_de_l_exposant.pdf",
+	"plaquettes/CATALOGUE_COMPLET_PRESTATIONS_COMPLEMENTAIRES.pdf",
+]
+
+[PackArgent]
+mail_path = "./mails/pack_argent"
+objet = "Forum Est-Horizon : Informations sur votre sélection du pack Argent"
+attachements = [
+	"plaquettes/Guide_de_l_exposant.pdf",
+	"plaquettes/CATALOGUE_COMPLET_PRESTATIONS_COMPLEMENTAIRES.pdf",
+]
+
+[PackBronze]
+mail_path = "./mails/pack_bronze"
+objet = "Forum Est-Horizon : Informations sur votre sélection du pack Bronze"
+attachements = [
+	"plaquettes/Guide_de_l_exposant.pdf",
+	"plaquettes/CATALOGUE_COMPLET_PRESTATIONS_COMPLEMENTAIRES.pdf",
+]
+
